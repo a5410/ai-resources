@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Videos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h2 {
+      margin-bottom: 16px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    a {
+      text-decoration: none;
+      color: #0066cc;
+      font-size: 1.05em;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Videos</h2>
+  <ul id="video-list">
+    <li>Loading videos…</li>
+  </ul>
+
+  <script>
+    const videoLinks = [
+      "https://www.youtube.com/watch?v=IpOiRmAEle8",
+      "https://www.youtube.com/watch?v=Cis57hC3KcM"
+    ];
+
+    const list = document.getElementById("video-list");
+    list.innerHTML = "";
+
+    videoLinks.forEach(url => {
+      fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = url;
+          a.textContent = data.title;
+          a.target = "_blank";
+          li.appendChild(a);
+          list.appendChild(li);
+        })
+        .catch(() => {
+          const li = document.createElement("li");
+          li.textContent = "Failed to load video title.";
+          list.appendChild(li);
+        });
+    });
+  </script>
+
+</body>
+</html>
